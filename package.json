@@ -11,7 +11,6 @@
     },
     "dependencies": {
         "@nuxt/ui": "4.2.1",
-        "better-dns": "^1.0.0",
         "nuxt": "^4.2.1",
         "pocketbase": "^0.26.3",
         "typescript": "^5.6.3",
