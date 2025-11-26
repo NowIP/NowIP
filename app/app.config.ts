@@ -4,8 +4,8 @@ export default defineAppConfig({
             // base: 'min-h-[calc(100vh-var(--ui-header-height))]'
         },
         colors: {
-            primary: 'cyan',
-            secondary: 'purple'
+            primary: 'emerald',
+            secondary: 'pink'
         }
     },
     theme: {
