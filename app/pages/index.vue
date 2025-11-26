@@ -1,8 +1,8 @@
 <script setup lang="ts">
 
-const data = await usePBData(async (pb) => {
-    return pb.collection('testdata').getFullList(10);
-});
+// const data = await useAPI().getDomains({});
+
+const data = "No data fetched yet.";
 
 </script>
 

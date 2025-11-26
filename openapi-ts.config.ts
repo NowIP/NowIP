@@ -5,5 +5,5 @@ export default defineConfig({
     output: 'app/api-client',
     plugins: [
         '@hey-api/client-nuxt'
-    ], 
+    ]
 });
