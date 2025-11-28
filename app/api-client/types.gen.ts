@@ -675,3 +675,23 @@ export type PutAccountPasswordResponses = {
 };
 
 export type PutAccountPasswordResponse = PutAccountPasswordResponses[keyof PutAccountPasswordResponses];
+
+export type PostAccountLogoutData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/account/logout';
+};
+
+export type PostAccountLogoutResponses = {
+    /**
+     * Logged out successfully
+     */
+    200: {
+        success: true;
+        message: 'Logged out successfully';
+        data: null;
+    };
+};
+
+export type PostAccountLogoutResponse = PostAccountLogoutResponses[keyof PostAccountLogoutResponses];

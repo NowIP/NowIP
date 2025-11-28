@@ -2,7 +2,7 @@
 
 import type { Client, Composable, Options as Options2, TDataShape } from './client';
 import { client } from './client.gen';
-import type { DeleteAccountData, DeleteAccountError, DeleteAccountResponse, DeleteDomainsDomainIdData, DeleteDomainsDomainIdError, DeleteDomainsDomainIdRecordsRecordIdData, DeleteDomainsDomainIdRecordsRecordIdError, DeleteDomainsDomainIdRecordsRecordIdResponse, DeleteDomainsDomainIdResponse, GetAccountData, GetAccountResponse, GetAuthSessionData, GetAuthSessionError, GetAuthSessionResponse, GetDomainsData, GetDomainsDomainIdData, GetDomainsDomainIdError, GetDomainsDomainIdRecordsData, GetDomainsDomainIdRecordsRecordIdData, GetDomainsDomainIdRecordsRecordIdError, GetDomainsDomainIdRecordsRecordIdResponse, GetDomainsDomainIdRecordsResponse, GetDomainsDomainIdResponse, GetDomainsResponse, GetNicUpdateData, GetNicUpdateError, GetNicUpdateResponse, PostAuthLoginData, PostAuthLoginError, PostAuthLoginResponse, PostAuthLogoutData, PostAuthLogoutError, PostAuthLogoutResponse, PostDomainsData, PostDomainsDomainIdRecordsData, PostDomainsDomainIdRecordsError, PostDomainsDomainIdRecordsResponse, PostDomainsError, PostDomainsResponse, PutAccountData, PutAccountError, PutAccountPasswordData, PutAccountPasswordError, PutAccountPasswordResponse, PutAccountResponse, PutDomainsDomainIdData, PutDomainsDomainIdError, PutDomainsDomainIdRecordsRecordIdData, PutDomainsDomainIdRecordsRecordIdError, PutDomainsDomainIdRecordsRecordIdResponse, PutDomainsDomainIdResponse } from './types.gen';
+import type { DeleteAccountData, DeleteAccountError, DeleteAccountResponse, DeleteDomainsDomainIdData, DeleteDomainsDomainIdError, DeleteDomainsDomainIdRecordsRecordIdData, DeleteDomainsDomainIdRecordsRecordIdError, DeleteDomainsDomainIdRecordsRecordIdResponse, DeleteDomainsDomainIdResponse, GetAccountData, GetAccountResponse, GetAuthSessionData, GetAuthSessionError, GetAuthSessionResponse, GetDomainsData, GetDomainsDomainIdData, GetDomainsDomainIdError, GetDomainsDomainIdRecordsData, GetDomainsDomainIdRecordsRecordIdData, GetDomainsDomainIdRecordsRecordIdError, GetDomainsDomainIdRecordsRecordIdResponse, GetDomainsDomainIdRecordsResponse, GetDomainsDomainIdResponse, GetDomainsResponse, GetNicUpdateData, GetNicUpdateError, GetNicUpdateResponse, PostAccountLogoutData, PostAccountLogoutResponse, PostAuthLoginData, PostAuthLoginError, PostAuthLoginResponse, PostAuthLogoutData, PostAuthLogoutError, PostAuthLogoutResponse, PostDomainsData, PostDomainsDomainIdRecordsData, PostDomainsDomainIdRecordsError, PostDomainsDomainIdRecordsResponse, PostDomainsError, PostDomainsResponse, PutAccountData, PutAccountError, PutAccountPasswordData, PutAccountPasswordError, PutAccountPasswordResponse, PutAccountResponse, PutDomainsDomainIdData, PutDomainsDomainIdError, PutDomainsDomainIdRecordsRecordIdData, PutDomainsDomainIdRecordsRecordIdError, PutDomainsDomainIdRecordsRecordIdResponse, PutDomainsDomainIdResponse } from './types.gen';
 
 export type Options<TComposable extends Composable = '$fetch', TData extends TDataShape = TDataShape, ResT = unknown, DefaultT = undefined> = Options2<TComposable, TData, ResT, DefaultT> & {
     /**
@@ -237,4 +237,15 @@ export const putAccountPassword = <TComposable extends Composable = '$fetch', De
         'Content-Type': 'application/json',
         ...options.headers
     }
+});
+
+/**
+ * Logout from current session
+ *
+ * Logs out the authenticated user from the current session.
+ */
+export const postAccountLogout = <TComposable extends Composable = '$fetch', DefaultT extends PostAccountLogoutResponse = PostAccountLogoutResponse>(options: Options<TComposable, PostAccountLogoutData, PostAccountLogoutResponse, DefaultT>) => (options.client ?? client).post<TComposable, PostAccountLogoutResponse | DefaultT, unknown, DefaultT>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/account/logout',
+    ...options
 });
