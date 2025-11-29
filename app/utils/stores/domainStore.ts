@@ -22,20 +22,6 @@ export class DomainStore {
         }
     }
 
-    static async getByID(id: string) {
-        const existing = this.data.find(d => d.id === Number(id));
-        if (existing) {
-            return existing;
-        } else {
-            const result = await useAPI().getDomain({ id: Number(id) });
-            if (result.success) {
-                this.data.push(result.data);
-                return result.data;
-            }
-        }
-        return null;
-    }
-
     static clear() {
         this.data.splice(0, this.data.length);
     }

@@ -4,8 +4,6 @@ export function useAPI(disableAuthRedirect = false) {
 
     const sessionToken = useCookie("session_token");
 
-    const apiURL = useRuntimeConfig().public.apiUrl;
-
     if (sessionToken.value) {
         updateAPIClient(sessionToken.value);
     }
