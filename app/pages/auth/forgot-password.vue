@@ -21,7 +21,7 @@ const fields: AuthFormField[] = [{
 }]
 
 const schema = z.object({
-    email: z.email('Invalid email address'),
+    email: z.email('Invalid email address').trim().min(1, 'Email is required')
 });
 
 type Schema = z.output<typeof schema>

@@ -37,8 +37,8 @@ const fields: AuthFormField[] = [{
 }]
 
 const schema = z.object({
-    username: z.string('Username is required'),
-    password: z.string('Password is required').min(8, 'Must be at least 8 characters'),
+    username: z.string('Username is required').trim().min(1, 'Username is required'),
+    password: z.string('Password is required').trim().min(1, 'Password is required'),
     remember: z.boolean().optional()
 });
 

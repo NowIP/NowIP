@@ -6,15 +6,15 @@ import type { FormSubmitEvent } from '@nuxt/ui'
 const toast = useToast();
 
 const passwordSchema = z.object({
-	current_password: z.string('Current Password is required'),
-	new_password: z.string('Password is required')
+	current_password: z.string('Current Password is required').trim().min(1, 'Current Password is required'),
+	new_password: z.string('Password is required').trim()
 		.min(8, 'Must be at least 8 characters')
         .max(50, 'Must be at most 50 characters')
         .regex(/[A-Z]/, 'Must contain at least one uppercase letter')
         .regex(/[a-z]/, 'Must contain at least one lowercase letter')
         .regex(/[0-9]/, 'Must contain at least one number')
         .regex(/[\W_]/, 'Must contain at least one special character'),
-    confirm_password: z.string('Confirm Password is required')
+    confirm_password: z.string('Confirm Password is required').trim().min(1, 'Confirm Password is required')
 })
 
 type PasswordSchema = z.output<typeof passwordSchema>
