@@ -5,7 +5,6 @@ import * as z from 'zod'
 import type { FormSubmitEvent, TableColumn } from '@nuxt/ui'
 import type { GetDomainsDomainIdRecordsResponse, GetDomainsDomainIdResponse } from '~/api-client'
 import { getFullDomain } from '~/composables/getFullDomain'
-import { is } from 'zod/locales'
 
 type Domain = GetDomainsDomainIdResponse['data']
 type DomainRecord = GetDomainsDomainIdRecordsResponse['data'][number]
@@ -269,68 +268,63 @@ const hasRecords = computed(() => records.value.length > 0);
 </script>
 
 <template>
-    <div class="flex flex-col gap-6 w-full mx-auto">
-        <template>
-            <UCard>
-                <template #header>
-                    <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                        <div>
-                            <p class="text-base font-medium">Additional DNS records</p>
-                            <p class="text-sm text-default-500">
-                                These records are served in addition to the automatic A/AAAA updates.
-                            </p>
-                        </div>
-                        <UButton variant="ghost" icon="i-lucide-rotate-ccw" :loading="loadingRecords" @click="fetchRecords">
-                            Refresh
-                        </UButton>
-                    </div>
-                </template>
-
-                <div v-if="loadingRecords" class="py-12 text-center text-sm text-default-500">
-                    Loading records...
+    <UCard>
+        <template #header>
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                <div>
+                    <p class="text-base font-medium">Additional DNS records</p>
+                    <p class="text-sm text-default-500">
+                        These records are served in addition to the automatic A/AAAA updates.
+                    </p>
                 </div>
-
-                <div v-else-if="!hasRecords"
-                    class="rounded-lg border border-dashed border-default/60 p-6 text-sm text-default-500">
-                    No custom records yet. Use the form below to add MX, TXT, or service-specific entries.
-                </div>
-
-                <UTable v-else :data="records" :columns="columns" class="flex-1" />
-            </UCard>
-
-            <UForm :schema="recordSchema" :state="recordState" @submit="handleRecordSubmit">
-                <UCard>
-                    <template #header>
-                        <div class="flex flex-col gap-1">
-                            <p class="text-base font-medium">Add record</p>
-                            <p class="text-sm text-default-500">Use @ for the root hostname.</p>
-                        </div>
-                    </template>
-
-                    <div class="grid gap-4 md:grid-cols-3">
-                        <UFormField name="subdomain" label="Host" class="md:col-span-1" required>
-                            <UInput v-model="recordState.subdomain" placeholder="@" />
-                        </UFormField>
-
-                        <UFormField name="type" label="Type" class="md:col-span-1" required>
-                            <USelect v-model="recordState.type" :options="recordTypeOptions" />
-                        </UFormField>
-
-                        <UFormField name="value" label="Value" class="md:col-span-3" required>
-                            <UTextarea v-model="recordState.value" :rows="3" placeholder="Target, text, or JSON payload" />
-                        </UFormField>
-                    </div>
-
-                    <template #footer>
-                        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-end">
-                            <UButton type="submit" color="primary" :loading="creatingRecord">
-                                Create record
-                            </UButton>
-                        </div>
-                    </template>
-                </UCard>
-            </UForm>
+                <UButton variant="ghost" icon="i-lucide-rotate-ccw" :loading="loadingRecords" @click="fetchRecords">
+                    Refresh
+                </UButton>
+            </div>
         </template>
-    </div>
-</template>
 
+        <div v-if="loadingRecords" class="py-12 text-center text-sm text-default-500">
+            Loading records...
+        </div>
+
+        <div v-else-if="!hasRecords"
+            class="rounded-lg border border-dashed border-default/60 p-6 text-sm text-default-500">
+            No custom records yet. Use the form below to add MX, TXT, or service-specific entries.
+        </div>
+
+        <UTable v-else :data="records" :columns="columns" class="flex-1" />
+    </UCard>
+
+    <UForm :schema="recordSchema" :state="recordState" @submit="handleRecordSubmit">
+        <UCard>
+            <template #header>
+                <div class="flex flex-col gap-1">
+                    <p class="text-base font-medium">Add record</p>
+                    <p class="text-sm text-default-500">Use @ for the root hostname.</p>
+                </div>
+            </template>
+
+            <div class="grid gap-4 md:grid-cols-3">
+                <UFormField name="subdomain" label="Host" class="md:col-span-1" required>
+                    <UInput v-model="recordState.subdomain" placeholder="@" />
+                </UFormField>
+
+                <UFormField name="type" label="Type" class="md:col-span-1" required>
+                    <USelect v-model="recordState.type" :options="recordTypeOptions" />
+                </UFormField>
+
+                <UFormField name="value" label="Value" class="md:col-span-3" required>
+                    <UTextarea v-model="recordState.value" :rows="3" placeholder="Target, text, or JSON payload" />
+                </UFormField>
+            </div>
+
+            <template #footer>
+                <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-end">
+                    <UButton type="submit" color="primary" :loading="creatingRecord">
+                        Create record
+                    </UButton>
+                </div>
+            </template>
+        </UCard>
+    </UForm>
+</template>

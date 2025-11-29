@@ -394,9 +394,37 @@ export type PostDomainsDomainIdRecordsData = {
     body?: {
         subdomain: string | '@';
         type: 'A' | 'AAAA' | 'CNAME' | 'MX' | 'SRV' | 'TXT' | 'SPF' | 'CAA';
-        record_data: string | number | boolean | null | {
-            [key: string]: unknown;
-        } | Array<unknown>;
+        record_data: {
+            address: string;
+            ttl?: number;
+        } | {
+            address: string;
+            ttl?: number;
+        } | {
+            domain: string;
+            ttl?: number;
+        } | {
+            exchange: string;
+            priority: number;
+            ttl?: number;
+        } | {
+            priority: number;
+            weight: number;
+            port: number;
+            target: string;
+            ttl?: number;
+        } | {
+            data: string | Array<string>;
+            ttl?: number;
+        } | {
+            data: string | Array<string>;
+            ttl?: number;
+        } | {
+            flags: number;
+            tag: string;
+            value: string;
+            ttl?: number;
+        };
     };
     path: {
         domainID: string;
@@ -520,9 +548,37 @@ export type PutDomainsDomainIdRecordsRecordIdData = {
     body?: {
         subdomain?: string | '@';
         type?: 'A' | 'AAAA' | 'CNAME' | 'MX' | 'SRV' | 'TXT' | 'SPF' | 'CAA';
-        record_data?: string | number | boolean | null | {
-            [key: string]: unknown;
-        } | Array<unknown>;
+        record_data?: {
+            address: string;
+            ttl?: number;
+        } | {
+            address: string;
+            ttl?: number;
+        } | {
+            domain: string;
+            ttl?: number;
+        } | {
+            exchange: string;
+            priority: number;
+            ttl?: number;
+        } | {
+            priority: number;
+            weight: number;
+            port: number;
+            target: string;
+            ttl?: number;
+        } | {
+            data: string | Array<string>;
+            ttl?: number;
+        } | {
+            data: string | Array<string>;
+            ttl?: number;
+        } | {
+            flags: number;
+            tag: string;
+            value: string;
+            ttl?: number;
+        };
     };
     path: {
         domainID: string;
