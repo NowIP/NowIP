@@ -297,7 +297,7 @@ export type GetDomainsDomainIdResponse = GetDomainsDomainIdResponses[keyof GetDo
 
 export type PutDomainsDomainIdData = {
     body?: {
-        subdomain: string;
+        subdomain?: string;
         ddnsv2_api_secret?: string;
     };
     path: {
@@ -371,7 +371,7 @@ export type GetDomainsDomainIdRecordsResponse = GetDomainsDomainIdRecordsRespons
 
 export type PostDomainsDomainIdRecordsData = {
     body?: {
-        subdomain: string;
+        subdomain: string | '@';
         type: 'A' | 'AAAA' | 'CNAME' | 'MX' | 'SRV' | 'TXT' | 'SPF' | 'CAA';
         record_data: string | number | boolean | null | {
             [key: string]: unknown;
@@ -491,7 +491,7 @@ export type GetDomainsDomainIdRecordsRecordIdResponse = GetDomainsDomainIdRecord
 
 export type PutDomainsDomainIdRecordsRecordIdData = {
     body?: {
-        subdomain: string;
+        subdomain?: string | '@';
         type?: 'A' | 'AAAA' | 'CNAME' | 'MX' | 'SRV' | 'TXT' | 'SPF' | 'CAA';
         record_data?: string | number | boolean | null | {
             [key: string]: unknown;
@@ -635,9 +635,9 @@ export type PutAccountPasswordData = {
          */
         current_password: string;
         /**
-         * New password for the account (at least 8 characters)
+         * New password for the account
          */
-        new_password: string;
+        new_password: unknown & unknown & unknown & unknown;
     };
     path?: never;
     query?: never;
