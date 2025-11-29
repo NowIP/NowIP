@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import * as z from 'zod'
 import type { FormSubmitEvent } from '@nuxt/ui'
+import { UserStore } from '../../utils/stores/userStore';
 
 const fileRef = ref<HTMLInputElement>()
 
@@ -12,7 +13,7 @@ const profileSchema = z.object({
 	email: z.email('Invalid email').trim(),
 })
 
-const userInfo = await SessionStore.useUserInfo();
+const userInfo = await UserStore.use();
 
 type ProfileSchema = z.output<typeof profileSchema>
 
@@ -38,7 +39,7 @@ async function onSubmit(event: FormSubmitEvent<ProfileSchema>) {
 				color: 'success'
 			})
 
-			SessionStore.setUserInfo({
+			UserStore.set({
 				...userInfo,
 				username: event.data.username,
 				email: event.data.email

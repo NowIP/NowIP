@@ -2,6 +2,7 @@
 import * as z from 'zod'
 import type { FormError } from '@nuxt/ui'
 import type { FormSubmitEvent } from '@nuxt/ui'
+import { UserStore } from '~/utils/stores/userStore';
 
 const toast = useToast();
 
@@ -52,7 +53,7 @@ async function onSubmit(event: FormSubmitEvent<PasswordSchema>) {
 				color: 'success'
 			});
 
-			SessionStore.clearUserInfo();
+			UserStore.clear();
 
 			useCookie("session_token").value = null;
 

@@ -4,6 +4,7 @@ import { h, resolveComponent } from 'vue'
 import type { TableColumn } from '@nuxt/ui'
 import type { Row } from '@tanstack/vue-table'
 import { useClipboard } from '@vueuse/core'
+import { DomainStore } from '~/utils/stores/domainStore';
 
 
 useSeoMeta({
@@ -15,29 +16,7 @@ const toast = useToast();
 
 type Domain = GetDomainsResponse["data"][0];
 
-let domains = reactive([] as Domain[]);
-try {
-    const response = await useAPI().getDomains({});
-    if (response.success) {
-
-        domains.push(...response.data);
-
-    } else {
-        toast.add({
-            title: 'Error',
-            description: response.message || 'An error occurred while fetching domains.',
-            icon: 'i-lucide-alert-circle',
-            color: 'error'
-        });
-    }
-} catch (error) {
-    toast.add({
-        title: 'Error',
-        description: 'An error occurred while fetching domains.',
-        icon: 'i-lucide-alert-circle',
-        color: 'error'
-    });
-}
+let domains = await DomainStore.use();
 
 const UButton = resolveComponent('UButton')
 const UBadge = resolveComponent('UBadge')

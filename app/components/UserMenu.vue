@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { DropdownMenuItem } from '@nuxt/ui'
+import { UserStore } from '~/utils/stores/userStore';
 
 defineProps<{
 	collapsed?: boolean
@@ -7,7 +8,7 @@ defineProps<{
 
 const toast = useToast()
 
-const userinfo = await SessionStore.useUserInfo()
+const userinfo = await UserStore.use()
 
 const user = ref({
 	name: userinfo.username,
@@ -20,7 +21,7 @@ async function logout() {
 	try {
 		const result = await useAPI().postAuthLogout({});
 
-		SessionStore.clearUserInfo();
+		UserStore.clear();
 
 		useCookie("session_token").value = null;
 

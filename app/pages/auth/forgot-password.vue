@@ -51,7 +51,7 @@ async function onSubmit(payload: FormSubmitEvent<Schema>) {
 
     //     sessionToken.value = result.data.token;
 
-    //     await SessionStore.fetchAndSetUserInfo();
+    //     await UserStore.fetchAndSetUserInfo();
 
     //     toast.add({
     //         title: 'Login Successful',

@@ -101,7 +101,7 @@ async function onSubmit(payload: FormSubmitEvent<SingupSchema>) {
 
     //     sessionToken.value = result.data.token;
 
-    //     await SessionStore.fetchAndSetUserInfo();
+    //     await UserStore.fetchAndSetUserInfo();
 
     //     toast.add({
     //         title: 'Login Successful',

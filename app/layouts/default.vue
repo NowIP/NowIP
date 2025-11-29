@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import type { NavigationMenuItem } from '@nuxt/ui'
+import type { GetDomainsResponse } from '~/api-client';
 import NowIPLogo from '~/components/img/NowIPLogo.vue'
 
 const open = ref(false)
 
-const links = [
+const toast = useToast();
+
+const links = reactive<NavigationMenuItem[]>([
     {
         label: 'Home',
         icon: 'i-lucide-house',
@@ -18,7 +21,8 @@ const links = [
         to: '/domains',
         onSelect: () => {
             open.value = false
-        }
+        },
+        children: []
     }, {
         label: 'Settings',
         to: '/settings',
@@ -42,7 +46,7 @@ const links = [
             }
         ]
     }
-] satisfies NavigationMenuItem[]
+] satisfies NavigationMenuItem[]);
 
 
 </script>
