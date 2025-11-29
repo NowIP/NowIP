@@ -52,6 +52,7 @@ export type PostAuthLoginErrors = {
      */
     400: {
         success: false;
+        code: 400;
         message: 'Bad Request: Syntax or validation error in request';
     };
     /**
@@ -59,6 +60,7 @@ export type PostAuthLoginErrors = {
      */
     401: {
         success: false;
+        code: 401;
         message: 'Unauthorized: Invalid username or password';
     };
 };
@@ -71,6 +73,7 @@ export type PostAuthLoginResponses = {
      */
     200: {
         success: true;
+        code: 200;
         message: 'Login successful';
         data: {
             token: string;
@@ -95,6 +98,7 @@ export type GetAuthSessionErrors = {
      */
     401: {
         success: false;
+        code: 401;
         message: 'Unauthorized: Invalid or missing session token';
     };
 };
@@ -107,6 +111,7 @@ export type GetAuthSessionResponses = {
      */
     200: {
         success: true;
+        code: 200;
         message: 'Session info retrieved successfully';
         data: {
             token: string;
@@ -131,6 +136,7 @@ export type PostAuthLogoutErrors = {
      */
     401: {
         success: false;
+        code: 401;
         message: 'Unauthorized: Invalid or missing session token';
     };
 };
@@ -143,6 +149,7 @@ export type PostAuthLogoutResponses = {
      */
     200: {
         success: true;
+        code: 200;
         message: 'Logout successful';
         data: null;
     };
@@ -163,6 +170,7 @@ export type GetDomainsResponses = {
      */
     200: {
         success: true;
+        code: 200;
         message: 'Domains retrieved successfully';
         data: Array<{
             id: number;
@@ -193,6 +201,7 @@ export type PostDomainsErrors = {
      */
     400: {
         success: false;
+        code: 400;
         message: 'Bad Request: Syntax or validation error in request';
     };
     /**
@@ -200,6 +209,7 @@ export type PostDomainsErrors = {
      */
     409: {
         success: false;
+        code: 409;
         message: 'Conflict: Domain with this subdomain already exists';
     };
 };
@@ -212,6 +222,7 @@ export type PostDomainsResponses = {
      */
     200: {
         success: true;
+        code: 200;
         message: 'Domain created successfully';
         data: {
             id: number;
@@ -236,6 +247,7 @@ export type DeleteDomainsDomainIdErrors = {
      */
     404: {
         success: false;
+        code: 404;
         message: 'Domain with specified ID not found';
     };
 };
@@ -248,6 +260,7 @@ export type DeleteDomainsDomainIdResponses = {
      */
     200: {
         success: true;
+        code: 200;
         message: 'Domain deleted successfully';
         data: null;
     };
@@ -270,6 +283,7 @@ export type GetDomainsDomainIdErrors = {
      */
     404: {
         success: false;
+        code: 404;
         message: 'Domain with specified ID not found';
     };
 };
@@ -282,6 +296,7 @@ export type GetDomainsDomainIdResponses = {
      */
     200: {
         success: true;
+        code: 200;
         message: 'Domain retrieved successfully';
         data: {
             id: number;
@@ -315,6 +330,7 @@ export type PutDomainsDomainIdErrors = {
      */
     400: {
         success: false;
+        code: 400;
         message: 'Bad Request: Syntax or validation error in request';
     };
     /**
@@ -322,6 +338,7 @@ export type PutDomainsDomainIdErrors = {
      */
     404: {
         success: false;
+        code: 404;
         message: 'Domain with specified ID not found';
     };
 };
@@ -334,6 +351,7 @@ export type PutDomainsDomainIdResponses = {
      */
     200: {
         success: true;
+        code: 200;
         message: 'Domain updated successfully';
         data: null;
     };
@@ -356,6 +374,7 @@ export type GetDomainsDomainIdRecordsResponses = {
      */
     200: {
         success: true;
+        code: 200;
         message: 'Records retrieved successfully';
         data: Array<{
             id: number;
@@ -392,6 +411,7 @@ export type PostDomainsDomainIdRecordsErrors = {
      */
     400: {
         success: false;
+        code: 400;
         message: 'Bad Request: Syntax or validation error in request';
     };
 };
@@ -404,6 +424,7 @@ export type PostDomainsDomainIdRecordsResponses = {
      */
     200: {
         success: true;
+        code: 200;
         message: 'DNS record created successfully';
         data: {
             id: number;
@@ -429,6 +450,7 @@ export type DeleteDomainsDomainIdRecordsRecordIdErrors = {
      */
     404: {
         success: false;
+        code: 404;
         message: 'Record with specified ID not found';
     };
 };
@@ -441,6 +463,7 @@ export type DeleteDomainsDomainIdRecordsRecordIdResponses = {
      */
     200: {
         success: true;
+        code: 200;
         message: 'Record deleted successfully';
         data: null;
     };
@@ -464,6 +487,7 @@ export type GetDomainsDomainIdRecordsRecordIdErrors = {
      */
     404: {
         success: false;
+        code: 404;
         message: 'Record with specified ID not found';
     };
 };
@@ -476,6 +500,7 @@ export type GetDomainsDomainIdRecordsRecordIdResponses = {
      */
     200: {
         success: true;
+        code: 200;
         message: 'Record retrieved successfully';
         data: {
             id: number;
@@ -513,6 +538,7 @@ export type PutDomainsDomainIdRecordsRecordIdErrors = {
      */
     400: {
         success: false;
+        code: 400;
         message: 'Bad Request: Syntax or validation error in request';
     };
     /**
@@ -520,6 +546,7 @@ export type PutDomainsDomainIdRecordsRecordIdErrors = {
      */
     404: {
         success: false;
+        code: 404;
         message: 'Record with specified ID not found';
     };
 };
@@ -532,6 +559,7 @@ export type PutDomainsDomainIdRecordsRecordIdResponses = {
      */
     200: {
         success: true;
+        code: 200;
         message: 'Record updated successfully';
         data: null;
     };
@@ -552,6 +580,7 @@ export type DeleteAccountErrors = {
      */
     400: {
         success: false;
+        code: 400;
         message: 'Bad Request: Syntax or validation error in request';
     };
 };
@@ -564,6 +593,7 @@ export type DeleteAccountResponses = {
      */
     200: {
         success: true;
+        code: 200;
         message: 'Account deleted successfully';
         data: null;
     };
@@ -584,6 +614,7 @@ export type GetAccountResponses = {
      */
     200: {
         success: true;
+        code: 200;
         message: 'Account information retrieved successfully';
         data: {
             id: number;
@@ -611,6 +642,7 @@ export type PutAccountErrors = {
      */
     400: {
         success: false;
+        code: 400;
         message: 'Bad Request: Syntax or validation error in request';
     };
 };
@@ -623,6 +655,7 @@ export type PutAccountResponses = {
      */
     200: {
         success: true;
+        code: 200;
         message: 'Account information updated successfully';
         data: null;
     };
@@ -652,6 +685,7 @@ export type PutAccountPasswordErrors = {
      */
     400: {
         success: false;
+        code: 400;
         message: 'Bad Request: Syntax or validation error in request';
     };
     /**
@@ -659,6 +693,7 @@ export type PutAccountPasswordErrors = {
      */
     401: {
         success: false;
+        code: 401;
         message: 'Current password is incorrect';
     };
 };
@@ -671,6 +706,7 @@ export type PutAccountPasswordResponses = {
      */
     200: {
         success: true;
+        code: 200;
         message: 'Password changed successfully';
         data: null;
     };
@@ -691,6 +727,7 @@ export type PostAccountLogoutResponses = {
      */
     200: {
         success: true;
+        code: 200;
         message: 'Logged out successfully';
         data: null;
     };
