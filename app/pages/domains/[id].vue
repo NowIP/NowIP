@@ -1,40 +1,79 @@
 <script setup lang="ts">
+import { computed, reactive, provide } from 'vue'
 import type { NavigationMenuItem } from '@nuxt/ui'
+import type { GetDomainsDomainIdResponse } from '~/api-client'
 
-const domainID = useRoute().params.id as string;
+const route = useRoute();
+const domainID = route.params.id as string;
+const isNewDomain = computed(() => domainID === 'new');
 
-const domain = await useAPI().getDomainsDomainId({
-    ignoreResponseError: true,
-    path: { domainID }
+type Domain = GetDomainsDomainIdResponse['data'];
+
+const domain = reactive<Domain>({
+    id: 0,
+    owner_id: 0,
+    subdomain: '',
+    last_ipv4: null,
+    last_ipv6: null,
+    last_ddns_update: null,
+    ddnsv2_api_secret: ''
 });
 
-if (!domain.success) {
-    throw createError({ statusCode: domain.code, statusMessage: domain.message });
-}
+const fetchDomain = async () => {
+    if (isNewDomain.value) {
+        return;
+    }
 
-// add shared reactive domain data for domain management pages
+    const result = await useAPI().getDomainsDomainId({
+        ignoreResponseError: true,
+        path: { domainID }
+    });
 
-const links = [[{
-    label: 'General',
-    icon: 'i-lucide-user',
-    to: `/domains/${domainID}`,
-    exact: true
-}, {
-    label: 'DNS Records',
-    icon: 'i-lucide-database',
-    to: `/domains/${domainID}/dns-records`
-}, {
-    label: 'Danger Zone',
-    icon: 'i-lucide-shield',
-    to: `/domains/${domainID}/danger-zone`
-}]] satisfies NavigationMenuItem[][]
+    if (!result.success) {
+        throw createError({ statusCode: result.code, statusMessage: result.message });
+    }
+
+    Object.assign(domain, result.data);
+};
+
+await fetchDomain();
+
+provide('domain', domain);
+provide('domainId', domainID);
+provide('isNewDomain', isNewDomain);
+provide('refreshDomain', fetchDomain);
+
+const links = computed<NavigationMenuItem[][]>(() => {
+    const base: NavigationMenuItem[][] = [[{
+        label: 'General',
+        icon: 'i-lucide-user',
+        to: `/domains/${domainID}`,
+        exact: true
+    }]];
+
+    if (!isNewDomain.value) {
+        (base[0] as NavigationMenuItem[]).push({
+            label: 'DNS Records',
+            icon: 'i-lucide-database',
+            to: `/domains/${domainID}/dns-records`
+        }, {
+            label: 'Danger Zone',
+            icon: 'i-lucide-shield',
+            to: `/domains/${domainID}/danger-zone`
+        });
+    }
+
+    return base;
+});
+
+const panelTitle = computed(() => isNewDomain.value ? 'Create Domain' : 'Manage Domain');
 
 </script>
 
 <template>
-    <UDashboardPanel id="manage-domain-${id}" :ui="{ body: 'lg:py-12' }">
+    <UDashboardPanel :id="`manage-domain-${domainID}`" :ui="{ body: 'lg:py-12' }">
         <template #header>
-            <UDashboardNavbar title="Settings">
+            <UDashboardNavbar :title="panelTitle">
                 <template #leading>
                     <UDashboardSidebarCollapse />
                 </template>
