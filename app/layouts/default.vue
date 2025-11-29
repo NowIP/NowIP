@@ -8,6 +8,10 @@ const open = ref(false)
 
 const domains = await DomainStore.use();
 
+const closeSidebar = () => {
+    open.value = false;
+};
+
 // Keep the sidebar list predictable by always sorting domains alphabetically.
 const sortedDomains = computed(() => {
     return [...domains].sort((a, b) =>
@@ -16,52 +20,57 @@ const sortedDomains = computed(() => {
 });
 
 // Show either each domain shortcut or an empty-state call-to-action.
-const domainSection = computed<NavigationMenuItem[]>(() => {
-    const section: NavigationMenuItem[] = [
+const domainSection = computed<NavigationMenuItem>(() => {
+    const baseChildren: NavigationMenuItem[] = [
         {
-            label: 'Domains',
+            label: 'Overview',
+            icon: 'i-lucide-layout-dashboard',
             to: '/domains',
-            icon: 'i-lucide-globe',
+            exact: true,
+            onSelect: closeSidebar
         },
         {
-            label: 'Your Domains:',
-            type: 'label'
+            label: 'Add domain',
+            icon: 'i-lucide-plus',
+            to: '/domains?intent=create',
+            onSelect: closeSidebar
         }
     ];
 
     if (!sortedDomains.value.length) {
-        section.push(
-            {
-                label: 'No domains yet',
-                description: 'Add a domain to start managing DNS records.',
-                icon: 'i-lucide-info',
-                disabled: true
-            },
-            {
-                label: 'Add domain',
-                icon: 'i-lucide-plus',
-                to: '/domains',
-                onSelect: () => {
-                    open.value = false
-                }
-            }
-        );
-        return section;
+        return {
+            label: 'Domains',
+            icon: 'i-lucide-globe',
+            badge: '0',
+            description: 'Add your first domain',
+            type: 'trigger',
+            defaultOpen: true,
+            children: baseChildren
+        } satisfies NavigationMenuItem;
     }
 
-    section.push(
-        ...sortedDomains.value.map((domain: GetDomainsResponse["data"][0]) => ({
-            label: getFullDomain(domain.subdomain),
-            icon: 'i-lucide-globe-2',
-            to: `/domains/${domain.id}`,
-            onSelect: () => {
-                open.value = false
-            }
-        }))
-        
-    );
+    const domainLinks: NavigationMenuItem[] = sortedDomains.value.map((domain: GetDomainsResponse["data"][0]) => ({
+        label: getFullDomain(domain.subdomain),
+        icon: 'i-lucide-globe-2',
+        to: `/domains/${domain.id}`,
+        onSelect: closeSidebar
+    }));
 
-    return section;
+    return {
+        label: 'Domains',
+        icon: 'i-lucide-globe',
+        badge: String(sortedDomains.value.length),
+        type: 'trigger',
+        defaultOpen: true,
+        children: [
+            ...baseChildren,
+            {
+                label: 'Your domains',
+                type: 'label'
+            },
+            ...domainLinks
+        ]
+    } satisfies NavigationMenuItem;
 });
 
 const links = computed<NavigationMenuItem[]>(() => [
@@ -69,11 +78,9 @@ const links = computed<NavigationMenuItem[]>(() => [
         label: 'Home',
         icon: 'i-lucide-house',
         to: '/',
-        onSelect: () => {
-            open.value = false
-        }
+        onSelect: closeSidebar
     },
-    ...domainSection.value,
+    domainSection.value,
     {
         label: 'Settings',
         to: '/settings',
@@ -86,16 +93,12 @@ const links = computed<NavigationMenuItem[]>(() => [
                 label: 'General',
                 to: '/settings',
                 exact: true,
-                onSelect: () => {
-                    open.value = false
-                }
+                onSelect: closeSidebar
             },
             {
                 label: 'Security',
                 to: '/settings/security',
-                onSelect: () => {
-                    open.value = false
-                }
+                onSelect: closeSidebar
             }
         ]
     }

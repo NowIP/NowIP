@@ -6,9 +6,7 @@ export function useAPI(disableAuthRedirect = false) {
 
     if (sessionToken.value) {
         updateAPIClient(sessionToken.value);
-    }
-
-    if (!sessionToken.value) {
+    } else {
         updateAPIClient(null);
         if (!disableAuthRedirect) {
             navigateTo('/auth/login?url=' + encodeURIComponent(useRoute().fullPath));
