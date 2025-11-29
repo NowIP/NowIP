@@ -14,9 +14,6 @@ definePageMeta({
     ]
 });
 
-const route = useRoute()
-const redirectUrl = route.query.url || '/';
-
 const toast = useToast();
 
 const fields: AuthFormField[] = [{
@@ -79,10 +76,7 @@ const validate = (state: Partial<RegisterSchema>): FormError[] => {
 	return errors
 }
 
-
-type Schema = z.output<typeof schema>
-
-async function onSubmit(payload: FormSubmitEvent<Schema>) {
+async function onSubmit(payload: FormSubmitEvent<RegisterSchema>) {
 
     // const result = await useAPI().postAuthLogin({ body: payload.data });
     

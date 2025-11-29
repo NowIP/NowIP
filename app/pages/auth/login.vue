@@ -93,8 +93,9 @@ async function onSubmit(payload: FormSubmitEvent<Schema>) {
             >
                 <template #footer>
                     <div class="text-center text-sm">
+                        Forgot your password?
                         <NuxtLink to="/auth/forgot-password" class="text-primary-600 hover:underline">
-                            Forgot your password?
+                            Reset here
                         </NuxtLink>
                     </div>
                     <div v-if="isSignupEnabled" class="text-center text-sm mt-2">
