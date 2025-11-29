@@ -28,6 +28,12 @@ type Schema = z.output<typeof schema>
 
 async function onSubmit(payload: FormSubmitEvent<Schema>) {
 
+    // @TODO: Implement forgot password when backend is implemented
+    toast.add({
+        title: 'Feature Not Implemented',
+        description: 'The forgot password feature is not yet implemented.'
+    });
+
     // const result = await useAPI().postAuthLogin({ body: payload.data });
     
     // if (result.success) {

@@ -78,6 +78,12 @@ const validate = (state: Partial<RegisterSchema>): FormError[] => {
 
 async function onSubmit(payload: FormSubmitEvent<RegisterSchema>) {
 
+    // @TODO: Implement signup when backend is implemented
+    toast.add({
+        title: 'Feature Not Implemented',
+        description: 'The signup feature is not yet implemented.'
+    });
+
     // const result = await useAPI().postAuthLogin({ body: payload.data });
     
     // if (result.success) {
