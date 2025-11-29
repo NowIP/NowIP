@@ -2,6 +2,10 @@
 import * as z from 'zod';
 import type { FormSubmitEvent, AuthFormField, FormError } from '@nuxt/ui'
 
+if (!useRuntimeConfig().public.isSignupEnabled) {
+    await navigateTo('/auth/login');
+}
+
 definePageMeta({
     layout: 'auth',
     title: 'Login | NowIP',
@@ -80,38 +84,38 @@ type Schema = z.output<typeof schema>
 
 async function onSubmit(payload: FormSubmitEvent<Schema>) {
 
-    const result = await useAPI().postAuthLogin({ body: payload.data });
+    // const result = await useAPI().postAuthLogin({ body: payload.data });
     
-    if (result.success) {
+    // if (result.success) {
         
-        updateAPIClient(result.data.token);
+    //     updateAPIClient(result.data.token);
 
-        const sessionToken = useCookie('session_token', {
-            path:     '/',
-            secure:   true,
-            sameSite: 'strict',
-            httpOnly: false,
-            maxAge:   604800,
-        });
+    //     const sessionToken = useCookie('session_token', {
+    //         path:     '/',
+    //         secure:   true,
+    //         sameSite: 'strict',
+    //         httpOnly: false,
+    //         maxAge:   604800,
+    //     });
 
-        sessionToken.value = result.data.token;
+    //     sessionToken.value = result.data.token;
 
-        await SessionStore.fetchAndSetUserInfo();
+    //     await SessionStore.fetchAndSetUserInfo();
 
-        toast.add({
-            title: 'Login Successful',
-            description: 'You have been logged in successfully.'
-        });
+    //     toast.add({
+    //         title: 'Login Successful',
+    //         description: 'You have been logged in successfully.'
+    //     });
         
-        await navigateTo(redirectUrl.toString());
-        return;
+    //     await navigateTo(redirectUrl.toString());
+    //     return;
 
-    } else {
-        toast.add({
-            title: 'Login Failed',
-            description: 'An error occurred during login.'
-        });
-    }
+    // } else {
+    //     toast.add({
+    //         title: 'Login Failed',
+    //         description: 'An error occurred during login.'
+    //     });
+    // }
 }
 
 </script>
@@ -120,7 +124,11 @@ async function onSubmit(payload: FormSubmitEvent<Schema>) {
     <div class="flex flex-col items-center justify-center gap-4 p-4">
         <UPageCard class="w-full max-w-md">
             <UAuthForm :schema="schema" :state="formState" :validate="validate" title="Register" description="Create a new account by filling in the information below."
-                icon="i-lucide-user" :fields="fields" @submit="onSubmit" />
+                icon="i-lucide-user" :fields="fields" @submit="onSubmit"
+                :submit="{
+                    label: 'Register',
+                }"
+                />
         </UPageCard>
     </div>
 </template>

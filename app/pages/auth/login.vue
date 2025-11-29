@@ -2,6 +2,8 @@
 import * as z from 'zod';
 import type { FormSubmitEvent, AuthFormField } from '@nuxt/ui'
 
+const isSignupEnabled = useRuntimeConfig().public.isSignupEnabled;
+
 definePageMeta({
     layout: 'auth',
     title: 'Login | NowIP',
@@ -30,12 +32,14 @@ const fields: AuthFormField[] = [{
 }, {
     name: 'remember',
     label: 'Remember me',
-    type: 'checkbox'
+    type: 'checkbox',
+    description: 'You will stay logged in for 30 days.',
 }]
 
 const schema = z.object({
     username: z.string('Username is required'),
-    password: z.string('Password is required').min(8, 'Must be at least 8 characters')
+    password: z.string('Password is required').min(8, 'Must be at least 8 characters'),
+    remember: z.boolean().optional()
 });
 
 type Schema = z.output<typeof schema>
@@ -51,9 +55,9 @@ async function onSubmit(payload: FormSubmitEvent<Schema>) {
         const sessionToken = useCookie('session_token', {
             path:     '/',
             secure:   true,
-            sameSite: 'strict',
+            sameSite: 'lax',
             httpOnly: false,
-            maxAge:   604800,
+            maxAge: payload.data.remember ? 60 * 60 * 24 * 30 : undefined // 30 days
         });
 
         sessionToken.value = result.data.token;
@@ -82,7 +86,25 @@ async function onSubmit(payload: FormSubmitEvent<Schema>) {
     <div class="flex flex-col items-center justify-center gap-4 p-4">
         <UPageCard class="w-full max-w-md">
             <UAuthForm :schema="schema" title="Login" description="Enter your credentials to access your account."
-                icon="i-lucide-user" :fields="fields" @submit="onSubmit" />
+                icon="i-lucide-user" :fields="fields" @submit="onSubmit" 
+                :submit="{
+                    label: 'Login',
+                }"
+            >
+                <template #footer>
+                    <div class="text-center text-sm">
+                        <NuxtLink to="/auth/forgot-password" class="text-primary-600 hover:underline">
+                            Forgot your password?
+                        </NuxtLink>
+                    </div>
+                    <div v-if="isSignupEnabled" class="text-center text-sm mt-2">
+                        Don't have an account?
+                        <NuxtLink to="/auth/signup" class="text-primary-600 hover:underline">
+                            Sign up
+                        </NuxtLink>
+                    </div>
+                </template>
+            </UAuthForm>
         </UPageCard>
     </div>
 </template>
