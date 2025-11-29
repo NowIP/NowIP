@@ -19,5 +19,8 @@
         "vue": "^3.5.25",
         "vue-router": "^4.6.3",
         "zod": "^4.1.13"
+    },
+    "devDependencies": {
+        "@iconify-json/lucide": "^1.2.77"
     }
 }

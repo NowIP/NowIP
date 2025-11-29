@@ -13,6 +13,9 @@
         "vue-router": "^4.6.3",
         "zod": "^4.1.13",
       },
+      "devDependencies": {
+        "@iconify-json/lucide": "^1.2.77",
+      },
     },
   },
   "packages": {
@@ -157,6 +160,8 @@
     "@hey-api/nuxt": ["@hey-api/nuxt@0.2.1", "", { "dependencies": { "@nuxt/kit": "3.15.4", "defu": "6.1.4", "mlly": "1.7.4" }, "peerDependencies": { "@hey-api/openapi-ts": "<2", "nuxt": ">=3.0.0", "vue": ">=3.5.13" } }, "sha512-c0mqiEf6qgRZUnFKVeCn7y7L9DnIjvVhWfQ9NFt14Sc8tbS7NUSbu9QnmjLOqn45jnU0qw42w8dVgY89D03OSw=="],
 
     "@hey-api/openapi-ts": ["@hey-api/openapi-ts@0.88.0", "", { "dependencies": { "@hey-api/codegen-core": "^0.3.3", "@hey-api/json-schema-ref-parser": "1.2.1", "ansi-colors": "4.1.3", "c12": "3.3.2", "color-support": "1.1.3", "commander": "14.0.2", "open": "11.0.0", "semver": "7.7.2" }, "peerDependencies": { "typescript": ">=5.5.3" }, "bin": { "openapi-ts": "bin/run.js" } }, "sha512-ZrvmDfmVf+N4ry786LAhS/DoH+xkIjIJIeDnj2aL1qnMTIDsdRIXXvr80EnAZVBgunzu1wTBbHb3H9OfyDQ2EQ=="],
+
+    "@iconify-json/lucide": ["@iconify-json/lucide@1.2.77", "", { "dependencies": { "@iconify/types": "*" } }, "sha512-FF3Z+np6Ksb0MaoQymhCHZ4xs5Oo8992Fw7By7bCgVCbBCClYV3wxpF8KzsI1FlxHD4ZXR42NVmXuqdW8YQGgA=="],
 
     "@iconify/collections": ["@iconify/collections@1.0.621", "", { "dependencies": { "@iconify/types": "*" } }, "sha512-md55k0SUK3ICEsqh9lEUVuu2upGCgzT0AqtLCq/74lE8Jp7G1wl8BtyDBls+YqpSFUeIyN082qmVFqFF6a0KYA=="],
 

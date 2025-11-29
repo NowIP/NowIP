@@ -5,7 +5,7 @@ useSeoMeta({
     description: 'NowIP Dashboard'
 });
 
-navigateTo('/domains', { replace: true });
+navigateTo('/domains');
 
 // const data = await useAPI().getDomains({});
 
