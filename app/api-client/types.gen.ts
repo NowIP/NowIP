@@ -170,6 +170,7 @@ export type GetDomainsResponses = {
             subdomain: string;
             last_ipv4: string | null;
             last_ipv6: string | null;
+            last_ddns_update: number | null;
             ddnsv2_api_secret: string;
         }>;
     };
@@ -288,6 +289,7 @@ export type GetDomainsDomainIdResponses = {
             subdomain: string;
             last_ipv4: string | null;
             last_ipv6: string | null;
+            last_ddns_update: number | null;
             ddnsv2_api_secret: string;
         };
     };
