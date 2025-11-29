@@ -19,5 +19,4 @@ export default defineNuxtRouteMiddleware(async(to) => {
     }
 
     await UserStore.fetchAndSetIfNeeded();
-    
 });

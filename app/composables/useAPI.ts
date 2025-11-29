@@ -8,7 +8,7 @@ export function useAPI(disableAuthRedirect = false) {
         updateAPIClient(sessionToken.value);
     } else {
         updateAPIClient(null);
-        if (!disableAuthRedirect) {
+        if (import.meta.client && !disableAuthRedirect) {
             navigateTo('/auth/login?url=' + encodeURIComponent(useRoute().fullPath));
         }
     }
