@@ -47,7 +47,7 @@ const schema = z.object({
         .min(5, 'Must be at least 5 characters')
         .max(30, 'Must be at most 30 characters')
         .regex(/^[a-zA-Z0-9_]+$/, 'Only alphanumeric characters and underscores are allowed'),
-    email: z.email('Invalid email address').trim().min(1, 'Email is required'),
+    email: z.email('Invalid email address').trim(),
     password: z.string('Password is required').trim()
         .min(8, 'Must be at least 8 characters')
         .max(50, 'Must be at most 50 characters')
