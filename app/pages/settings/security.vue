@@ -6,21 +6,32 @@ import type { FormSubmitEvent } from '@nuxt/ui'
 const toast = useToast();
 
 const passwordSchema = z.object({
-	current_password: z.string(),
-	new_password: z.string().min(8, 'Must be at least 8 characters')
+	current_password: z.string('Current Password is required'),
+	new_password: z.string('Password is required')
+		.min(8, 'Must be at least 8 characters')
+        .max(50, 'Must be at most 50 characters')
+        .regex(/[A-Z]/, 'Must contain at least one uppercase letter')
+        .regex(/[a-z]/, 'Must contain at least one lowercase letter')
+        .regex(/[0-9]/, 'Must contain at least one number')
+        .regex(/[\W_]/, 'Must contain at least one special character'),
+    confirm_password: z.string('Confirm Password is required')
 })
 
 type PasswordSchema = z.output<typeof passwordSchema>
 
 const password = reactive<Partial<PasswordSchema>>({
 	current_password: undefined,
-	new_password: undefined
+	new_password: undefined,
+	confirm_password: undefined
 })
 
 const validate = (state: Partial<PasswordSchema>): FormError[] => {
 	const errors: FormError[] = []
 	if (state.current_password && state.new_password && state.current_password === state.new_password) {
 		errors.push({ name: 'new_password', message: 'Passwords must be different' })
+	}
+	if (state.new_password && state.confirm_password && state.new_password !== state.confirm_password) {
+		errors.push({ name: 'confirm_password', message: 'Passwords do not match' })
 	}
 	return errors
 }

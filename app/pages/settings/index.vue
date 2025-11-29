@@ -5,8 +5,11 @@ import type { FormSubmitEvent } from '@nuxt/ui'
 const fileRef = ref<HTMLInputElement>()
 
 const profileSchema = z.object({
-	username: z.string().min(2, 'Too short'),
-	email: z.string().email('Invalid email'),
+	username: z.string()
+		.min(5, 'Must be at least 5 characters')
+        .max(30, 'Must be at most 30 characters')
+        .regex(/^[a-zA-Z0-9_]+$/, 'Only alphanumeric characters and underscores are allowed'),
+	email: z.email('Invalid email'),
 })
 
 const userInfo = await SessionStore.useUserInfo();
