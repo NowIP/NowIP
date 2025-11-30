@@ -15,7 +15,23 @@ useSeoMeta({
 });
 
 const route = useRoute()
-const redirectUrl = route.query.url || '/';
+
+// Validate redirect URL to prevent open redirect attacks
+const getValidRedirectUrl = (url: unknown): string => {
+    if (typeof url !== 'string' || !url) {
+        return '/';
+    }
+    // Remove any newlines or control characters to prevent header injection
+    const sanitized = url.replace(/[\r\n\t]/g, '');
+    // Only allow relative paths starting with /
+    // Prevent protocol-relative URLs (//evil.com) and absolute URLs
+    if (sanitized.startsWith('/') && !sanitized.startsWith('//')) {
+        return sanitized;
+    }
+    return '/';
+};
+
+const redirectUrl = getValidRedirectUrl(route.query.url);
 
 const toast = useToast();
 
