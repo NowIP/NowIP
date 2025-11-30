@@ -658,7 +658,7 @@ const copyRecord = async (record: DomainRecord) => {
                     </UFormField>
 
                     <UFormField name="type" label="Type" class="md:col-span-1" required>
-                        <USelect v-model="recordState.type" :options="recordTypeOptions" />
+                        <USelect v-model="recordState.type" :items="recordTypeOptions" />
                     </UFormField>
 
                     <UFormField name="ttl" label="TTL (seconds)" class="md:col-span-2">
