@@ -9,11 +9,12 @@ import type {
     PostDomainsDomainIdRecordsData
 } from '~/api-client'
 import { getFullDomain } from '~/composables/getFullDomain'
+import { DNSRecordDataSchemas, DNSRecordDataSchemasNames } from '~/utils/dns-utils'
 
 type Domain = GetDomainsDomainIdResponse['data']
 type DomainRecord = GetDomainsDomainIdRecordsResponse['data'][number]
 type RecordPayload = NonNullable<PostDomainsDomainIdRecordsData['body']>
-type RecordType = RecordPayload['type']
+type RecordType = (typeof DNSRecordDataSchemasNames)[number]
 
 const domain = inject<Domain>('domain')
 const domainId = inject<string>('domainId')
@@ -51,9 +52,9 @@ const recordTypeDefinitions = [
     { value: 'CAA', label: 'CAA · Certificate', helper: 'Control which certificate authorities may issue for this domain.' }
 ] as const satisfies ReadonlyArray<{ value: RecordType; label: string; helper: string }>
 
-const recordTypeValues = recordTypeDefinitions.map((item) => item.value) as RecordType[]
+const recordTypeValues = DNSRecordDataSchemasNames as [RecordType, ...RecordType[]]
 const recordTypeOptions = recordTypeValues
-const recordTypeEnum = z.enum(recordTypeValues as [RecordType, ...RecordType[]])
+const recordTypeEnum = z.enum(recordTypeValues)
 
 const emptySpecificFields = () => ({
     address: '',
@@ -68,6 +69,21 @@ const emptySpecificFields = () => ({
     tag: '',
     value: ''
 })
+
+const schemaFieldToFormField: Record<string, string> = {
+    address: 'address',
+    domain: 'domain',
+    exchange: 'exchange',
+    priority: 'priority',
+    weight: 'weight',
+    port: 'port',
+    target: 'target',
+    data: 'textData',
+    flags: 'flags',
+    tag: 'tag',
+    value: 'value',
+    ttl: 'ttl'
+}
 
 const recordSchema = z
     .object({
@@ -95,8 +111,13 @@ const recordSchema = z
             })
         }
 
-        if (values.ttl && (Number.isNaN(Number(values.ttl)) || Number(values.ttl) <= 0)) {
-            require('ttl', 'TTL must be a positive number')
+        if (values.ttl?.trim()) {
+            const ttlValue = Number(values.ttl)
+            if (Number.isNaN(ttlValue)) {
+                require('ttl', 'TTL must be numeric')
+            } else if (ttlValue < 0 || ttlValue > 86400) {
+                require('ttl', 'TTL must be between 0 and 86400 seconds')
+            }
         }
 
         switch (values.type) {
@@ -153,6 +174,29 @@ const recordSchema = z
                     require('flags', 'Flags must be numeric')
                 }
                 break
+        }
+
+        try {
+            buildPayload(values as RecordForm)
+        } catch (error) {
+            if (error instanceof z.ZodError) {
+                error.issues.forEach((issue) => {
+                    const rawPath = issue.path.at(-1)
+                    if (typeof rawPath !== 'string') {
+                        return
+                    }
+                    const formField = schemaFieldToFormField[rawPath]
+                    if (!formField) {
+                        return
+                    }
+
+                    ctx.addIssue({
+                        code: z.ZodIssueCode.custom,
+                        path: [formField],
+                        message: issue.message
+                    })
+                })
+            }
         }
     })
 
@@ -216,78 +260,59 @@ const toTextPayload = (value: string) => {
     return lines
 }
 
-const buildPayload = (form: RecordForm): RecordPayload => {
+const buildRecordData = (form: RecordForm) => {
     const ttl = parseNumberField(form.ttl)
-    const applyTTL = <T extends Record<string, unknown>>(data: T) => (ttl ? { ...data, ttl } : data)
-
-    const subdomain = normalizeSubdomain(form.subdomain)
+    const applyTTL = <T extends Record<string, unknown>>(data: T) =>
+        typeof ttl === 'number' ? { ...data, ttl } : data
 
     switch (form.type) {
         case 'A':
-            return {
-                subdomain,
-                type: 'A',
-                record_data: applyTTL({ address: form.address!.trim() })
-            }
+            return applyTTL({ address: form.address!.trim() })
         case 'AAAA':
-            return {
-                subdomain,
-                type: 'AAAA',
-                record_data: applyTTL({ address: form.address!.trim() })
-            }
+            return applyTTL({ address: form.address!.trim() })
         case 'CNAME':
-            return {
-                subdomain,
-                type: 'CNAME',
-                record_data: applyTTL({ domain: form.domain!.trim() })
-            }
+            return applyTTL({ domain: form.domain!.trim() })
         case 'MX':
-            return {
-                subdomain,
-                type: 'MX',
-                record_data: applyTTL({
-                    exchange: form.exchange!.trim(),
-                    priority: Number(form.priority)
-                })
-            }
+            return applyTTL({
+                exchange: form.exchange!.trim(),
+                priority: Number(form.priority)
+            })
         case 'SRV':
-            return {
-                subdomain,
-                type: 'SRV',
-                record_data: applyTTL({
-                    priority: Number(form.priority),
-                    weight: Number(form.weight),
-                    port: Number(form.port),
-                    target: form.target!.trim()
-                })
-            }
+            return applyTTL({
+                priority: Number(form.priority),
+                weight: Number(form.weight),
+                port: Number(form.port),
+                target: form.target!.trim()
+            })
         case 'TXT':
-            return {
-                subdomain,
-                type: 'TXT',
-                record_data: applyTTL({
-                    data: toTextPayload(form.textData ?? '')
-                })
-            }
+            return applyTTL({
+                data: toTextPayload(form.textData ?? '')
+            })
         case 'SPF':
-            return {
-                subdomain,
-                type: 'SPF',
-                record_data: applyTTL({
-                    data: toTextPayload(form.textData ?? '')
-                })
-            }
+            return applyTTL({
+                data: toTextPayload(form.textData ?? '')
+            })
         case 'CAA':
-            return {
-                subdomain,
-                type: 'CAA',
-                record_data: applyTTL({
-                    flags: Number(form.flags),
-                    tag: form.tag!.trim(),
-                    value: form.value!.trim()
-                })
-            }
+            return applyTTL({
+                flags: Number(form.flags),
+                tag: form.tag!.trim(),
+                value: form.value!.trim()
+            })
+        default:
+            throw new Error(`Unsupported record type: ${form.type}`)
     }
+}
+
+const buildPayload = (form: RecordForm): RecordPayload => {
+    const subdomain = normalizeSubdomain(form.subdomain)
+    const schema = DNSRecordDataSchemas[form.type]
+    const record_data = schema.parse(buildRecordData(form))
+
+    return {
+        subdomain,
+        type: form.type,
+        record_data
+    } as RecordPayload
 }
 
 const formatRecordValue = (record: DomainRecord) => {
@@ -637,7 +662,7 @@ const copyRecord = async (record: DomainRecord) => {
                     </UFormField>
 
                     <UFormField name="ttl" label="TTL (seconds)" class="md:col-span-2">
-                        <UInput v-model="recordState.ttl" type="number" min="60" step="60"
+                        <UInput v-model="recordState.ttl" type="number" min="1" max="86400" step="60"
                             placeholder="Default" />
                     </UFormField>
 
