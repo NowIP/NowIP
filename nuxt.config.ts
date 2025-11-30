@@ -18,7 +18,14 @@ export default defineNuxtConfig({
 	] : [],
 
 	nitro: {
-		preset: 'bun'
+		preset: 'bun',
+
+		devProxy: process.env.USE_DEV_PROXY === "true" ? {
+			"/api/proxy": {
+				target: process.env.DEV_PROXY_TARGET || "https://api.nowip.is-on.net",
+				changeOrigin: true
+			}
+		} : {}
 	},
 
 	runtimeConfig: {
