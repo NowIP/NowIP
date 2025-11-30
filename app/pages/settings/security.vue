@@ -91,6 +91,10 @@ async function onSubmit(event: FormSubmitEvent<PasswordSchema>) {
 				<UInput v-model="password.new_password" type="password" placeholder="New password" class="w-full" />
 			</UFormField>
 
+			<UFormField name="confirm_password">
+				<UInput v-model="password.confirm_password" type="password" placeholder="Confirm new password" class="w-full" />
+			</UFormField>
+
 			<UButton label="Update" class="w-fit" type="submit" />
 		</UForm>
 	</UPageCard>
